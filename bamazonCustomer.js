@@ -33,7 +33,7 @@ function allQuery() {
                     + " " + rows[row].stock_quantity);
             }
             console.log("");
-            prompt();
+            // prompt();   //todo: put me back
         }
     );
     connection.end();
@@ -60,11 +60,10 @@ function checkQuantity(quantity, id) {
     console.log("check quantity against: "+quantity);
 
     var connection = createConnection();
-    // connection.query('SELECT stock_quantity FROM products where product_id = ?',
-        connection.query('SELECT * FROM products where product_id = ?',
+    connection.query('SELECT stock_quantity FROM products where product_id = ?',
+        // connection.query('SELECT * FROM products where product_id = ?',
         [id],
         function (err, rows) {
-            // console.log(rows);
             if (err) {
                 console.log(err.message);
             }
@@ -105,4 +104,4 @@ function displayItemms() {
 
 function testCase() {
 }
-// displayItemms();
+displayItemms();
