@@ -1,0 +1,26 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fortis91/bamazon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fortis91/bamazon/issues"
+  },
+  "homepage": "https://github.com/fortis91/bamazon#readme",
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "inquirer": "^6.3.1",
+    "mysql": "^2.17.1",
+    "mysqljs": "0.0.2-security"
+  }
+}
