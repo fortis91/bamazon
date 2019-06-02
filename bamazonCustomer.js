@@ -19,7 +19,7 @@ function createConnection() {
     return connection;
 }
 
-// function allQuery() {
+// function displayItems() {
 //     console.clear();
 //     console.log("Products on BAmazon");
 //     console.log("");
@@ -41,7 +41,7 @@ function createConnection() {
 //     connection.end();
 // }
 
-function allQuery(message) {
+function displayItems(message) {
     console.clear();
     console.log("Products on BAmazon");
     console.log("");
@@ -72,7 +72,7 @@ function purchaseItem(quantity, id, availableQty) {
             if (err) {
                 console.log(err.message);
             }
-            allQuery();
+            displayItems();
         }
     );
     connection.end();
@@ -89,7 +89,7 @@ function checkQuantity(quantity, id) {
             if (parseInt(rows[0].stock_quantity) >= parseInt(quantity)) {
                 purchaseItem(quantity, id, rows[0].stock_quantity);
             } else {
-                allQuery("requested quantity not available");
+                displayItemms("requested quantity not available");
             }
         }
     );
@@ -111,9 +111,6 @@ function prompt() {
     });
 }
 
-function displayItemms() {
-    allQuery();
-}
 
 function testCase() {}
-displayItemms();
+displayItems();
