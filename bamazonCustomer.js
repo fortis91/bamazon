@@ -64,7 +64,7 @@ function displayItems(message) {
     connection.end();
 }
 
-function purchaseItem(quantity, id, availableQty) {
+function purchaseItem(quantity, id, availableQty, price) {
     var stock_quantity = availableQty - parseInt(quantity);
     var connection = createConnection();
     connection.query('UPDATE products SET stock_quantity = ? where product_id = ?', [stock_quantity, id],
@@ -72,7 +72,8 @@ function purchaseItem(quantity, id, availableQty) {
             if (err) {
                 console.log(err.message);
             }
-            displayItems();
+            displayTotal(quantity, price);
+            // displayItems();
         }
     );
     connection.end();
@@ -80,16 +81,17 @@ function purchaseItem(quantity, id, availableQty) {
 
 function checkQuantity(quantity, id) {
     var connection = createConnection();
-    connection.query('SELECT stock_quantity FROM products where product_id = ?', [id],
+    connection.query('SELECT stock_quantity, price, product_name FROM products where product_id = ?', [id],
         function(err, rows) {
             if (err) {
                 console.log(err.message);
             }
             console.log(rows);
             if (parseInt(rows[0].stock_quantity) >= parseInt(quantity)) {
-                purchaseItem(quantity, id, rows[0].stock_quantity);
+                purchaseItem(quantity, id, rows[0].stock_quantity, rows[0].price);
             } else {
-                displayItemms("requested quantity not available");
+                displayItems("requested quantity not available");
+                // displayTotal();
             }
         }
     );
@@ -106,11 +108,40 @@ function prompt() {
             message: "How many would you like? "
         }
     ]).then(function(answers) {
-        console.log(answers);
         checkQuantity(parseInt(answers.quantity), parseInt(answers.id));
     });
 }
 
+// function buyAgain() {
+//     inquirer.prompt([{
+//         name: "answer",
+//         message: "What item would you like to purchase? ",
+//     }, ]).then(function(answers) {
+//         console.log(answers);
+//         checkQuantity(parseInt(answers.quantity), parseInt(answers.id));
+//     });
+// }
 
-function testCase() {}
+function displayTotal(quantity, price) {
+    // console.clear();
+    console.log("Your total: " + quantity * price);
+    console.log("");
+    inquirer.prompt([{
+        type: 'list',
+        name: "response",
+        message: "Continue shopping?",
+        choices: ["Yes", "No"]
+    }]).then(function(answers) {
+        if (answers.response === "Yes") {
+            displayItems();
+        } else {
+            console.log("Thanks for shopping at BAmazon");
+        }
+    });
+}
+
+function testCase() {
+    displayTotal()
+}
+// testCase();
 displayItems();
