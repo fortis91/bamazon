@@ -13,7 +13,7 @@ function createConnection() {
         password: "bootcamp",
         database: "bamazon"
     });
-    connection.connect(function (err) {
+    connection.connect(function(err) {
         if (err) throw err;
     });
     return connection;
@@ -26,7 +26,7 @@ function displayItems(message) {
     var connection = createConnection();
     connection.query(`SELECT product_id as "ID", product_name as "Item", 
                         price as "Price", stock_quantity as "Qty" FROM products WHERE stock_quantity > 0`,
-        function (err, rows) {
+        function(err, rows) {
             if (err) {
                 console.log(err.message);
             }
@@ -46,7 +46,7 @@ function purchaseItem(quantity, id, availableQty, price) {
     var stock_quantity = availableQty - parseInt(quantity);
     var connection = createConnection();
     connection.query('UPDATE products SET stock_quantity = ? where product_id = ?', [stock_quantity, id],
-        function (err, rows) {
+        function(err, rows) {
             if (err) {
                 console.log(err.message);
             }
@@ -60,7 +60,7 @@ function purchaseItem(quantity, id, availableQty, price) {
 function checkQuantity(quantity, id) {
     var connection = createConnection();
     connection.query('SELECT stock_quantity, price, product_name FROM products where product_id = ?', [id],
-        function (err, rows) {
+        function(err, rows) {
             if (err) {
                 console.log(err.message);
             }
@@ -77,14 +77,14 @@ function checkQuantity(quantity, id) {
 
 function prompt() {
     inquirer.prompt([{
-        name: "id",
-        message: "What item would you like to purchase? ",
-    },
-    {
-        name: "quantity",
-        message: "How many would you like? "
-    }
-    ]).then(function (answers) {
+            name: "id",
+            message: "What item would you like to purchase? ",
+        },
+        {
+            name: "quantity",
+            message: "How many would you like? "
+        }
+    ]).then(function(answers) {
         checkQuantity(parseInt(answers.quantity), parseInt(answers.id));
     });
 }
@@ -98,7 +98,7 @@ function displayTotal(quantity, price) {
         name: "response",
         message: "Continue shopping?",
         choices: ["Yes", "No"]
-    }]).then(function (answers) {
+    }]).then(function(answers) {
         if (answers.response === "Yes") {
             displayItems();
         } else {
@@ -113,7 +113,7 @@ function subMenu() {
         name: 'response',
         message: '-------------------',
         choices: ['Main Menu', 'Exit']
-    }]).then(function (answers) {
+    }]).then(function(answers) {
         switch (answers.response) {
             case 'Main Menu':
                 displayMainMenu();
@@ -124,9 +124,27 @@ function subMenu() {
         }
     });
 }
+
 function viewAllProducts() {
-    console.clear();    
+    console.clear();
     console.log('');
+    var connection = createConnection();
+    connection.query(`SELECT product_id as "ID", product_name as "Item", 
+                        price as "Price", stock_quantity as "Qty" FROM products WHERE stock_quantity > 0`,
+        function(err, rows) {
+            if (err) {
+                console.log(err.message);
+            }
+            console.log(columnify(rows));
+            // if (message) {
+            //     console.log(message);
+            // } else {
+            //     console.log("");
+            // }
+            // prompt();
+        }
+    );
+    connection.end();
     subMenu();
     // inquirer.prompt([{
     //     type: 'list',
@@ -144,26 +162,30 @@ function viewAllProducts() {
     //     }
     // });
 }
-function viewLowInventory(){
+
+function viewLowInventory() {
     console.log('view low inventory');
     subMenu();
 }
-function addToInventory(){                
+
+function addToInventory() {
     console.log('add to inventory');
     // subMenu();
 }
-function addNewProduct(){
+
+function addNewProduct() {
     console.log('add new product');
     // subMenu();
 }
+
 function displayMainMenu() {
-    console.clear();    
+    console.clear();
     inquirer.prompt([{
         type: 'list',
         name: "response",
         message: "BAmazon Main Menu",
         choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Product', 'Exit']
-    }]).then(function (answers) {
+    }]).then(function(answers) {
         switch (answers.response) {
             case 'View Products for Sale':
                 viewAllProducts();
